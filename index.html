@@ -3,32 +3,52 @@
 <head>
 <title>Birthday Challenge</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
 <style>
 
 body{
 margin:0;
-background:#0a0a0f;
+background:#050510;
+font-family:'Orbitron',sans-serif;
 color:#00f7ff;
-font-family:Orbitron, Arial;
 text-align:center;
 overflow:hidden;
 }
 
+/* CYBER GRID BACKGROUND */
+
+.grid{
+position:fixed;
+width:100%;
+height:100%;
+background:
+linear-gradient(#111 1px, transparent 1px),
+linear-gradient(90deg,#111 1px, transparent 1px);
+background-size:40px 40px;
+z-index:-1;
+}
+
+/* TITLES */
+
 h1{
-font-size:50px;
+font-size:55px;
 margin-top:80px;
 text-shadow:0 0 20px #00f7ff;
 }
 
 h2{
-color:#00f7ff;
 text-shadow:0 0 10px #00f7ff;
 }
 
+/* SCORE */
+
 #score{
-font-size:24px;
+font-size:22px;
 margin-top:10px;
 }
+
+/* ORB GAME */
 
 #orb{
 width:60px;
@@ -36,20 +56,24 @@ height:60px;
 border-radius:50%;
 background:#00f7ff;
 position:absolute;
-box-shadow:0 0 20px #00f7ff;
+box-shadow:0 0 25px #00f7ff;
 cursor:pointer;
 }
 
+/* GIFT */
+
 #gift{
-font-size:100px;
+font-size:110px;
 position:absolute;
 left:50%;
 top:50%;
 transform:translate(-50%,-50%);
 cursor:pointer;
 display:none;
-transition:left 0.3s, top 0.3s;
+transition:left 0.25s, top 0.25s;
 }
+
+/* FINAL MESSAGE */
 
 #message{
 display:none;
@@ -60,9 +84,9 @@ transform:translate(-50%,-50%);
 }
 
 #message h1{
-font-size:60px;
+font-size:65px;
 color:#ff00f7;
-text-shadow:0 0 25px #ff00f7;
+text-shadow:0 0 30px #ff00f7;
 }
 
 </style>
@@ -73,21 +97,34 @@ text-shadow:0 0 25px #ff00f7;
 
 <body>
 
-<h1>LEVEL 1</h1>
-<h2>Catch the energy orbs ⚡</h2>
+<div class="grid"></div>
 
-<div id="score">Score: 0 / 5</div>
+<h1>LEVEL 1</h1>
+<h2>Catch the Energy Orbs ⚡</h2>
+
+<div id="score">Score: 0 / 6</div>
 
 <div id="orb"></div>
 
 <div id="gift">🎁</div>
 
 <div id="message">
+
 <h1>🎉 HAPPY BIRTHDAY BRO 🎉</h1>
-<p>You finally caught the gift 😆</p>
+
+<p>You beat the game 😎</p>
+
+<p>Have an awesome year ahead!</p>
+
 </div>
 
+<audio id="music" autoplay loop>
+<source src="techno.mp3" type="audio/mpeg">
+</audio>
+
 <script>
+
+/* LEVEL 1 GAME */
 
 let score = 0
 let orb = document.getElementById("orb")
@@ -100,16 +137,16 @@ orb.onclick = function(){
 score++
 
 document.getElementById("score").innerText =
-"Score: " + score + " / 5"
+"Score: " + score + " / 6"
 
 moveOrb()
 
-if(score >= 5){
+if(score >= 6){
 
 orb.style.display="none"
 
 document.querySelector("h1").innerText="LEVEL CLEARED"
-document.querySelector("h2").innerText="Catch your gift 🎁"
+document.querySelector("h2").innerText="Catch the gift to unlock it"
 
 gift.style.display="block"
 
@@ -127,6 +164,8 @@ orb.style.top = y+"px"
 
 }
 
+/* GIFT BOSS LEVEL */
+
 gift.onmousemove = function(){
 
 let x = Math.random()*(window.innerWidth-120)
@@ -137,6 +176,8 @@ gift.style.top = y+"px"
 
 }
 
+/* FINAL WIN */
+
 gift.onclick = function(){
 
 gift.style.display="none"
@@ -144,7 +185,7 @@ gift.style.display="none"
 document.getElementById("message").style.display="block"
 
 confetti({
-particleCount:300,
+particleCount:350,
 spread:120,
 origin:{y:0.6}
 })
