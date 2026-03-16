@@ -22,29 +22,18 @@ h1{
     color:white;
 }
 
+h2{
+    color:white;
+}
+
 p{
     font-size:22px;
     color:white;
 }
 
-button{
-    padding:15px 30px;
-    font-size:20px;
-    border:none;
-    border-radius:10px;
-    background:#ff4081;
+#countdown{
+    font-size:40px;
     color:white;
-    cursor:pointer;
-}
-
-button:hover{
-    background:#e91e63;
-}
-
-#message{
-    display:none;
-    font-size:28px;
-    margin-top:30px;
 }
 
 img{
@@ -53,15 +42,18 @@ img{
     margin-top:20px;
 }
 
-</style>
-
-<script>
-
-function showMessage(){
-    document.getElementById("message").style.display="block"
+.gift-box{
+font-size:120px;
+cursor:pointer;
+margin-top:40px;
+transition: transform 0.3s;
 }
 
-</script>
+.gift-box:hover{
+transform: scale(1.2);
+}
+
+</style>
 
 </head>
 
@@ -75,21 +67,48 @@ function showMessage(){
 
 <div id="surprise" style="display:none">
 
+<h2>🎁 Click the gift to open your surprise</h2>
+
+<div class="gift-box" onclick="openGift()">🎁</div>
+
+<div id="birthdayMessage" style="display:none">
+
 <h1>🎂 Happy Birthday Bro! 🎂</h1>
 
 <p>You are the best brother ever!</p>
 
-<p>Hope your year is filled with happiness, success and lots of cake 🎉</p>
+<p>Hope your year is full of happiness, success and lots of cake 🎉</p>
 
-<img src="brother.jpg" width="250">
+<audio id="music" src="birthday.mp3"></audio>
+
+<img src="brother.jpg">
 
 </div>
 
 </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <script>
 
-var countDate = new Date("Mar 16, 2026 09:00:00").getTime();
+function openGift(){
+
+document.querySelector(".gift-box").style.display="none";
+document.getElementById("birthdayMessage").style.display="block";
+
+document.getElementById("music").play();
+
+confetti({
+particleCount:250,
+spread:140,
+origin:{y:0.6}
+});
+
+}
+
+var countDate = new Date("Mar 16, 2026 09:10:00").getTime();
 
 var x = setInterval(function(){
 
@@ -112,9 +131,9 @@ document.getElementById("countdown").style.display="none";
 document.getElementById("surprise").style.display="block";
 
 confetti({
-particleCount: 200,
-spread: 120,
-origin: { y: 0.6 }
+particleCount:200,
+spread:120,
+origin:{y:0.6}
 });
 
 }
@@ -122,8 +141,6 @@ origin: { y: 0.6 }
 },1000);
 
 </script>
-
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 </body>
 </html>
