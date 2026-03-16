@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <title>Birthday Mission</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -39,8 +40,8 @@ to{background-position:1000px 1000px;}
 /* TITLES */
 
 h1{
-font-size:55px;
-margin-top:80px;
+font-size:50px;
+margin-top:60px;
 text-shadow:0 0 20px #00f7ff;
 }
 
@@ -62,14 +63,14 @@ padding:15px 30px;
 font-size:18px;
 cursor:pointer;
 box-shadow:0 0 15px #00f7ff;
-margin-top:30px;
+margin-top:20px;
 }
 
 /* GAME OBJECTS */
 
 .orb{
-width:60px;
-height:60px;
+width:80px;
+height:80px;
 border-radius:50%;
 background:#00f7ff;
 position:absolute;
@@ -78,8 +79,8 @@ cursor:pointer;
 }
 
 .target{
-width:60px;
-height:60px;
+width:80px;
+height:80px;
 border-radius:50%;
 background:#ff00f7;
 position:absolute;
@@ -119,21 +120,18 @@ transform:translate(-50%,-50%);
 }
 
 #message h1{
-font-size:65px;
+font-size:60px;
 color:#ff00f7;
 text-shadow:0 0 25px #ff00f7;
 }
 
-@media (max-width: 600px){
+/* MOBILE */
 
-h1{
-font-size:32px;
-margin-top:40px;
-}
+@media (max-width:600px){
 
-h2{
-font-size:18px;
-}
+h1{font-size:32px;margin-top:40px;}
+
+h2{font-size:18px;}
 
 button{
 font-size:16px;
@@ -176,8 +174,10 @@ padding:12px 20px;
 </div>
 
 <div id="message">
+
 <h1>🎉 HAPPY BIRTHDAY BRO 🎉</h1>
 <p>You completed the mission 😎</p>
+
 </div>
 
 <audio id="music" loop>
@@ -186,19 +186,19 @@ padding:12px 20px;
 
 <script>
 
-let level = 0
-let score = 0
+let level=0
+let score=0
 
-let orb = document.getElementById("orb")
-let target = document.getElementById("target")
+let orb=document.getElementById("orb")
+let target=document.getElementById("target")
 
-let gifts = [
+let gifts=[
 document.getElementById("gift1"),
 document.getElementById("gift2"),
 document.getElementById("gift3")
 ]
 
-let realGift = document.getElementById("realGift")
+let realGift=document.getElementById("realGift")
 
 /* START GAME */
 
@@ -210,6 +210,7 @@ document.getElementById("startBtn").style.display="none"
 
 level=1
 score=0
+updateScore()
 
 document.getElementById("title").innerText="LEVEL 1"
 document.getElementById("subtitle").innerText="Catch the energy orbs ⚡"
@@ -257,7 +258,7 @@ showLevelComplete("LEVEL 2 COMPLETE",3)
 
 }
 
-/* NEXT LEVEL BUTTON */
+/* NEXT LEVEL */
 
 document.getElementById("nextLevelBtn").onclick=function(){
 
@@ -292,6 +293,7 @@ spawnGifts()
 function showLevelComplete(text,nextLevel){
 
 document.getElementById("levelMessage").innerText=text
+
 document.getElementById("levelScreen").style.display="block"
 
 level=nextLevel
@@ -307,8 +309,11 @@ spread:100
 
 function move(obj){
 
-let x=Math.random()*(window.innerWidth-100)
-let y=Math.random()*(window.innerHeight-100)
+let maxX=window.innerWidth-100
+let maxY=window.innerHeight-100
+
+let x=Math.random()*maxX
+let y=Math.random()*maxY
 
 obj.style.left=x+"px"
 obj.style.top=y+"px"
@@ -318,7 +323,9 @@ obj.style.top=y+"px"
 /* SCORE */
 
 function updateScore(){
+
 document.getElementById("score").innerText="Score: "+score
+
 }
 
 /* SPAWN GIFTS */
@@ -328,13 +335,16 @@ function spawnGifts(){
 gifts.forEach(g=>{
 g.style.display="block"
 move(g)
+
 g.onmouseover=runAway
+g.ontouchstart=runAway
 })
 
 realGift.style.display="block"
 move(realGift)
 
-realGift.onmousemover=runAway
+realGift.onmouseover=runAway
+realGift.ontouchstart=runAway
 realGift.onclick=win
 
 }
