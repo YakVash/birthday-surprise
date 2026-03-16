@@ -46,7 +46,8 @@ img{
 font-size:120px;
 cursor:pointer;
 margin-top:40px;
-transition: transform 0.3s;
+transition: transform 0.2s;
+position:relative;
 }
 
 .gift-box:hover{
@@ -108,17 +109,19 @@ opacity:0;
 
 <div id="surprise" style="display:none">
 
-<h2>🎁 Click the gift to open your surprise</h2>
+<h2>🎁 Keep opening the gifts!</h2>
 
-<div class="gift-box" onclick="openGift()">🎁</div>
+<p id="tease"></p>
+
+<div id="gift" class="gift-box" onclick="openGift()">🎁</div>
 
 <div id="birthdayMessage" style="display:none">
 
 <h1>🎂 Happy Birthday Bro! 🎂</h1>
 
-<p>You are the best brother ever!</p>
+<p>You finally caught the gift 😆</p>
 
-<p>Hope your year is full of happiness, success and lots of cake 🎉</p>
+<p>Hope your year is full of happiness and success!</p>
 
 <audio id="music" src="birthday.mp3"></audio>
 
@@ -134,62 +137,92 @@ opacity:0;
 
 <script>
 
-    function openGift(){
+    let clickCount = 0;
 
-        document.querySelector(".gift-box").style.display="none";
-        document.getElementById("birthdayMessage").style.display="block";
+    
 
-        document.getElementById("music").play();
+function openGift(){
 
-        startFireworks();
+clickCount++;
 
+let gift = document.getElementById("gift");
+
+    if(clickCount == 3){
+        document.getElementById("tease").innerHTML =
+        "Almost there... try opening it again 😏";
     }
 
-var countDate = new Date("Mar 16, 2026 09:10:00").getTime();
+else{
 
-var x = setInterval(function(){
+gift.innerHTML = "🎁";
 
-var now = new Date().getTime();
-var distance = countDate - now;
-
-var days = Math.floor(distance / (1000*60*60*24));
-var hours = Math.floor((distance % (1000*60*60*24)) / (1000*60*60));
-var minutes = Math.floor((distance % (1000*60*60)) / (1000*60));
-var seconds = Math.floor((distance % (1000*60)) / 1000);
-
-document.getElementById("countdown").innerHTML =
-days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
-
-if(distance < 0){
-
-clearInterval(x);
-
-document.getElementById("countdown").style.display="none";
-document.getElementById("surprise").style.display="block";
-
-confetti({
-particleCount:200,
-spread:120,
-origin:{y:0.6}
-});
+gift.onmouseover = runAway;
 
 }
 
-},1000);
+}
 
-    function startFireworks(){
+function runAway(){
 
-        setInterval(function(){
+let gift = document.getElementById("gift");
 
-        confetti({
-        particleCount:150,
-        spread:100,
-        origin:{x:Math.random(), y:Math.random()/2}
-        });
+let x = Math.random() * (window.innerWidth - 150);
+let y = Math.random() * (window.innerHeight - 150);
 
-        },800);
+gift.style.position = "absolute";
+gift.style.left = x + "px";
+gift.style.top = y + "px";
+
+if(clickCount > 6){
+
+gift.style.display="none";
+showFinalMessage();
+
+}
+
+clickCount++;
+
+}
+
+function showFinalMessage(){
+
+document.getElementById("birthdayMessage").style.display="block";
+
+confetti({
+particleCount:250,
+spread:140,
+origin:{y:0.6}
+});
+
+document.getElementById("music").play();
+
+}
+
+    var countDate = new Date("Mar 16, 2026 09:00:00").getTime();
+
+    var timer = setInterval(function(){
+
+    var now = new Date().getTime();
+    var distance = countDate - now;
+
+    var days = Math.floor(distance/(1000*60*60*24));
+    var hours = Math.floor((distance%(1000*60*60*24))/(1000*60*60));
+    var minutes = Math.floor((distance%(1000*60*60))/(1000*60));
+    var seconds = Math.floor((distance%(1000*60))/1000);
+
+    document.getElementById("countdown").innerHTML =
+    days + "d " + hours + "h " + minutes + "m " + seconds + "s";
+
+    if(distance < 0){
+
+    clearInterval(timer);
+
+    document.getElementById("countdown").style.display="none";
+    document.getElementById("surprise").style.display="block";
 
     }
+
+    },1000);
 
 </script>
 
