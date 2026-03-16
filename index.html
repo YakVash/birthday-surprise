@@ -46,8 +46,11 @@ img{
 font-size:120px;
 cursor:pointer;
 margin-top:40px;
-transition: transform 0.2s;
-position:relative;
+position:absolute;
+left:50%;
+top:300px;
+transform:translateX(-50%);
+transition:left 0.3s, top 0.3s;
 }
 
 .gift-box:hover{
@@ -156,31 +159,44 @@ else{
 
 gift.innerHTML = "🎁";
 
-gift.onmouseover = runAway;
+gift.onmousemove = runAway;
 
 }
 
 }
 
-function runAway(){
+function runAway(event){
 
 let gift = document.getElementById("gift");
 
-let x = Math.random() * (window.innerWidth - 150);
-let y = Math.random() * (window.innerHeight - 150);
+let mouseX = event.clientX;
+let mouseY = event.clientY;
 
-gift.style.position = "absolute";
-gift.style.left = x + "px";
-gift.style.top = y + "px";
+let rect = gift.getBoundingClientRect();
 
-if(clickCount > 6){
+let giftX = rect.left + rect.width/2;
+let giftY = rect.top + rect.height/2;
+
+let distance = Math.hypot(mouseX - giftX, mouseY - giftY);
+
+if(distance < 150){
+
+let newX = Math.random() * (window.innerWidth - 150);
+let newY = Math.random() * (window.innerHeight - 150);
+
+gift.style.left = newX + "px";
+gift.style.top = newY + "px";
+
+clickCount++;
+
+}
+
+if(clickCount > 8){
 
 gift.style.display="none";
 showFinalMessage();
 
 }
-
-clickCount++;
 
 }
 
