@@ -9,31 +9,36 @@
 
 body{
 margin:0;
-background:#04040a;
+background:#050510;
 font-family:'Orbitron',sans-serif;
 color:#00f7ff;
 text-align:center;
 overflow:hidden;
 }
 
-/* CYBER GRID */
+/* STAR BACKGROUND */
 
-.grid{
+.stars{
 position:fixed;
 width:100%;
 height:100%;
-background:
-linear-gradient(#111 1px, transparent 1px),
-linear-gradient(90deg,#111 1px, transparent 1px);
-background-size:40px 40px;
+background:black;
+background-image: radial-gradient(white 1px, transparent 1px);
+background-size:50px 50px;
+animation: moveStars 60s linear infinite;
 z-index:-1;
+}
+
+@keyframes moveStars{
+from{background-position:0 0;}
+to{background-position:1000px 1000px;}
 }
 
 /* TITLES */
 
 h1{
 font-size:55px;
-margin-top:70px;
+margin-top:80px;
 text-shadow:0 0 20px #00f7ff;
 }
 
@@ -41,14 +46,23 @@ h2{
 text-shadow:0 0 10px #00f7ff;
 }
 
-/* SCORE */
-
 #score{
 font-size:22px;
 margin-top:10px;
 }
 
-/* LEVEL OBJECTS */
+/* BUTTON */
+
+button{
+background:#00f7ff;
+border:none;
+padding:15px 30px;
+font-size:18px;
+cursor:pointer;
+box-shadow:0 0 15px #00f7ff;
+}
+
+/* GAME OBJECTS */
 
 .orb{
 width:60px;
@@ -70,17 +84,25 @@ box-shadow:0 0 25px #ff00f7;
 cursor:pointer;
 }
 
-/* GIFT */
+/* GIFTS */
 
-#gift{
-font-size:110px;
+.gift{
+font-size:90px;
 position:absolute;
-left:50%;
-top:50%;
-transform:translate(-50%,-50%);
 cursor:pointer;
 display:none;
-transition:left 0.25s, top 0.25s;
+transition:left .25s, top .25s;
+}
+
+/* LEVEL SCREEN */
+
+#levelScreen{
+display:none;
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+text-align:center;
 }
 
 /* FINAL MESSAGE */
@@ -94,9 +116,9 @@ transform:translate(-50%,-50%);
 }
 
 #message h1{
-font-size:70px;
+font-size:65px;
 color:#ff00f7;
-text-shadow:0 0 30px #ff00f7;
+text-shadow:0 0 25px #ff00f7;
 }
 
 </style>
@@ -107,57 +129,89 @@ text-shadow:0 0 30px #ff00f7;
 
 <body>
 
-<div class="grid"></div>
+<div class="stars"></div>
 
-<h1 id="title">LEVEL 1</h1>
-<h2 id="subtitle">Catch the Energy Orbs ⚡</h2>
+<h1 id="title">BIRTHDAY MISSION</h1>
+<h2 id="subtitle">Clear the levels to unlock your gift</h2>
 
-<div id="score">Score: 0</div>
+<button id="startBtn">Begin Mission</button>
 
-<div id="orb" class="orb"></div>
+<div id="score"></div>
+
+<div id="orb" class="orb" style="display:none"></div>
 <div id="target" class="target" style="display:none"></div>
 
-<div id="gift">🎁</div>
+<div id="gift1" class="gift">🎁</div>
+<div id="gift2" class="gift">🎁</div>
+<div id="gift3" class="gift">🎁</div>
+<div id="realGift" class="gift">🎁</div>
+
+<div id="levelScreen">
+
+<h1 id="levelMessage"></h1>
+
+<button id="nextLevelBtn">Next Level</button>
+
+</div>
 
 <div id="message">
 <h1>🎉 HAPPY BIRTHDAY BRO 🎉</h1>
 <p>You completed the mission 😎</p>
 </div>
 
+<audio id="music" loop>
+<source src="arcadegame.mp3" type="audio/mpeg">
+</audio>
+
 <script>
 
-/* VARIABLES */
-
+let level = 0
 let score = 0
-let level = 1
 
 let orb = document.getElementById("orb")
 let target = document.getElementById("target")
-let gift = document.getElementById("gift")
 
-moveObject(orb)
+let gifts = [
+document.getElementById("gift1"),
+document.getElementById("gift2"),
+document.getElementById("gift3")
+]
+
+let realGift = document.getElementById("realGift")
+
+/* START GAME */
+
+document.getElementById("startBtn").onclick=function(){
+
+document.getElementById("music").play()
+
+document.getElementById("startBtn").style.display="none"
+
+level=1
+score=0
+
+document.getElementById("title").innerText="LEVEL 1"
+document.getElementById("subtitle").innerText="Catch the energy orbs ⚡"
+
+orb.style.display="block"
+move(orb)
+
+}
 
 /* LEVEL 1 */
 
-orb.onclick = function(){
+orb.onclick=function(){
 
 score++
 updateScore()
 
-moveObject(orb)
+move(orb)
 
-if(score >= 5){
-
-level = 2
-score = 0
+if(score>=5){
 
 orb.style.display="none"
-target.style.display="block"
 
-document.getElementById("title").innerText="LEVEL 2"
-document.getElementById("subtitle").innerText="Hit the Neon Targets 🎯"
-
-moveObject(target)
+showLevelComplete("LEVEL 1 COMPLETE",2)
 
 }
 
@@ -165,36 +219,78 @@ moveObject(target)
 
 /* LEVEL 2 */
 
-target.onclick = function(){
+target.onclick=function(){
 
 score++
 updateScore()
 
-moveObject(target)
+move(target)
 
-if(score >= 6){
+if(score>=6){
 
-level = 3
 target.style.display="none"
 
-document.getElementById("title").innerText="FINAL LEVEL"
-document.getElementById("subtitle").innerText="Catch the Gift 🎁"
-
-gift.style.display="block"
+showLevelComplete("LEVEL 2 COMPLETE",3)
 
 }
+
+}
+
+/* NEXT LEVEL BUTTON */
+
+document.getElementById("nextLevelBtn").onclick=function(){
+
+document.getElementById("levelScreen").style.display="none"
+
+score=0
+updateScore()
+
+if(level==2){
+
+document.getElementById("title").innerText="LEVEL 2"
+document.getElementById("subtitle").innerText="Hit the neon targets 🎯"
+
+target.style.display="block"
+move(target)
+
+}
+
+else if(level==3){
+
+document.getElementById("title").innerText="FINAL LEVEL"
+document.getElementById("subtitle").innerText="Find the real gift"
+
+spawnGifts()
+
+}
+
+}
+
+/* SHOW LEVEL COMPLETE */
+
+function showLevelComplete(text,nextLevel){
+
+document.getElementById("levelMessage").innerText=text
+document.getElementById("levelScreen").style.display="block"
+
+level=nextLevel
+
+confetti({
+particleCount:150,
+spread:100
+})
 
 }
 
 /* MOVE OBJECT */
 
-function moveObject(obj){
+function move(obj){
 
-let x = Math.random()*(window.innerWidth-100)
-let y = Math.random()*(window.innerHeight-100)
+let x=Math.random()*(window.innerWidth-100)
+let y=Math.random()*(window.innerHeight-100)
 
-obj.style.left = x+"px"
-obj.style.top = y+"px"
+obj.style.left=x+"px"
+obj.style.top=y+"px"
 
 }
 
@@ -204,23 +300,41 @@ function updateScore(){
 document.getElementById("score").innerText="Score: "+score
 }
 
-/* GIFT DODGE */
+/* SPAWN GIFTS */
 
-gift.onmousemove = function(){
+function spawnGifts(){
 
-let x = Math.random()*(window.innerWidth-120)
-let y = Math.random()*(window.innerHeight-120)
+gifts.forEach(g=>{
+g.style.display="block"
+move(g)
+g.onmouseover=runAway
+})
 
-gift.style.left = x+"px"
-gift.style.top = y+"px"
+realGift.style.display="block"
+move(realGift)
+
+realGift.onmousemover=runAway
+realGift.onclick=win
+
+}
+
+/* GIFT RUN AWAY */
+
+function runAway(){
+
+let x=Math.random()*(window.innerWidth-120)
+let y=Math.random()*(window.innerHeight-120)
+
+this.style.left=x+"px"
+this.style.top=y+"px"
 
 }
 
 /* WIN */
 
-gift.onclick = function(){
+function win(){
 
-gift.style.display="none"
+document.querySelectorAll(".gift").forEach(g=>g.style.display="none")
 
 document.getElementById("message").style.display="block"
 
