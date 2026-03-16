@@ -69,22 +69,54 @@ function showMessage(){
 
 <div class="container">
 
-<h1>🎉 Happy Birthday Bro 🎉</h1>
+<h1>🎉 Birthday Countdown 🎉</h1>
 
-<p>Click the button for a surprise</p>
+<h2 id="countdown"></h2>
 
-<button onclick="showMessage()">Open Surprise 🎁</button>
+<div id="surprise" style="display:none">
 
-<div id="message">
+<h1>🎂 Happy Birthday Bro! 🎂</h1>
 
 <p>You are the best brother ever!</p>
-<p>Hope your year is full of happiness, success and cake 🎂</p>
 
-<img src="brother.jpg">
+<p>Hope your year is filled with happiness, success and lots of cake 🎉</p>
+
+<img src="brother.jpg" width="250">
 
 </div>
 
 </div>
+
+<script>
+
+var countDate = new Date("Mar 20, 2026 00:00:00").getTime();
+
+var x = setInterval(function(){
+
+var now = new Date().getTime();
+
+var distance = countDate - now;
+
+var days = Math.floor(distance / (1000*60*60*24));
+var hours = Math.floor((distance % (1000*60*60*24)) / (1000*60*60));
+var minutes = Math.floor((distance % (1000*60*60)) / (1000*60));
+var seconds = Math.floor((distance % (1000*60)) / 1000);
+
+document.getElementById("countdown").innerHTML =
+days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+
+if(distance < 0){
+
+clearInterval(x);
+
+document.getElementById("countdown").style.display="none";
+document.getElementById("surprise").style.display="block";
+
+}
+
+},1000);
+
+</script>
 
 </body>
 </html>
