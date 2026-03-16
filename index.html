@@ -1,248 +1,157 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Happy Birthday Bro 🎉</title>
+<title>Birthday Challenge</title>
 
 <style>
 
 body{
-    margin:0;
-    font-family: Arial;
-    text-align:center;
-    background: linear-gradient(120deg,#ff9a9e,#fad0c4);
-    height:100vh;
-}
-
-.container{
-    margin-top:120px;
+margin:0;
+background:#0a0a0f;
+color:#00f7ff;
+font-family:Orbitron, Arial;
+text-align:center;
+overflow:hidden;
 }
 
 h1{
-    font-size:60px;
-    color:white;
+font-size:50px;
+margin-top:80px;
+text-shadow:0 0 20px #00f7ff;
 }
 
 h2{
-    color:white;
+color:#00f7ff;
+text-shadow:0 0 10px #00f7ff;
 }
 
-p{
-    font-size:22px;
-    color:white;
+#score{
+font-size:24px;
+margin-top:10px;
 }
 
-#countdown{
-    font-size:40px;
-    color:white;
-}
-
-img{
-    width:250px;
-    border-radius:20px;
-    margin-top:20px;
-}
-
-.gift-box{
-font-size:120px;
+#orb{
+width:60px;
+height:60px;
+border-radius:50%;
+background:#00f7ff;
+position:absolute;
+box-shadow:0 0 20px #00f7ff;
 cursor:pointer;
-margin-top:40px;
+}
+
+#gift{
+font-size:100px;
 position:absolute;
 left:50%;
-top:300px;
-transform:translateX(-50%);
+top:50%;
+transform:translate(-50%,-50%);
+cursor:pointer;
+display:none;
 transition:left 0.3s, top 0.3s;
 }
 
-.gift-box:hover{
-transform: scale(1.2);
+#message{
+display:none;
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
 }
 
-.balloons{
-position:fixed;
-bottom:-150px;
-width:100%;
-display:flex;
-justify-content:space-around;
-pointer-events:none;
-}
-
-.balloon{
-width:60px;
-height:80px;
-background:red;
-border-radius:50%;
-animation: float 8s infinite ease-in;
-}
-
-.balloon:nth-child(2){background:blue; animation-duration:10s;}
-.balloon:nth-child(3){background:yellow; animation-duration:9s;}
-.balloon:nth-child(4){background:purple; animation-duration:11s;}
-.balloon:nth-child(5){background:green; animation-duration:7s;}
-
-@keyframes float{
-0%{
-transform:translateY(0);
-opacity:1;
-}
-100%{
-transform:translateY(-120vh);
-opacity:0;
-}
+#message h1{
+font-size:60px;
+color:#ff00f7;
+text-shadow:0 0 25px #ff00f7;
 }
 
 </style>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 </head>
 
 <body>
 
-    <div class="balloons">
-        <div class="balloon"></div>
-        <div class="balloon"></div>
-        <div class="balloon"></div>
-        <div class="balloon"></div>
-        <div class="balloon"></div>
-    </div>
+<h1>LEVEL 1</h1>
+<h2>Catch the energy orbs ⚡</h2>
 
-<div class="container">
+<div id="score">Score: 0 / 5</div>
 
-<h1>🎉 Birthday Countdown 🎉</h1>
+<div id="orb"></div>
 
-<h2 id="countdown"></h2>
+<div id="gift">🎁</div>
 
-<div id="surprise" style="display:none">
-
-<h2>🎁 Keep opening the gifts!</h2>
-
-<p id="tease"></p>
-
-<div id="gift" class="gift-box" onclick="openGift()">🎁</div>
-
-<div id="birthdayMessage" style="display:none">
-
-<h1>🎂 Happy Birthday Bro! 🎂</h1>
-
+<div id="message">
+<h1>🎉 HAPPY BIRTHDAY BRO 🎉</h1>
 <p>You finally caught the gift 😆</p>
-
-<p>Hope your year is full of happiness and success!</p>
-
-<audio id="music" src="birthday.mp3"></audio>
-
-<img src="brother.jpg">
-
 </div>
-
-</div>
-
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <script>
 
-    let clickCount = 0;
+let score = 0
+let orb = document.getElementById("orb")
+let gift = document.getElementById("gift")
 
-    
+moveOrb()
 
-function openGift(){
+orb.onclick = function(){
 
-clickCount++;
+score++
 
-let gift = document.getElementById("gift");
+document.getElementById("score").innerText =
+"Score: " + score + " / 5"
 
-    if(clickCount == 3){
-        document.getElementById("tease").innerHTML =
-        "Almost there... try opening it again 😏";
-    }
+moveOrb()
 
-else{
+if(score >= 5){
 
-gift.innerHTML = "🎁";
+orb.style.display="none"
 
-gift.onmousemove = runAway;
+document.querySelector("h1").innerText="LEVEL CLEARED"
+document.querySelector("h2").innerText="Catch your gift 🎁"
 
-}
-
-}
-
-function runAway(event){
-
-let gift = document.getElementById("gift");
-
-let mouseX = event.clientX;
-let mouseY = event.clientY;
-
-let rect = gift.getBoundingClientRect();
-
-let giftX = rect.left + rect.width/2;
-let giftY = rect.top + rect.height/2;
-
-let distance = Math.hypot(mouseX - giftX, mouseY - giftY);
-
-if(distance < 150){
-
-let newX = Math.random() * (window.innerWidth - 150);
-let newY = Math.random() * (window.innerHeight - 150);
-
-gift.style.left = newX + "px";
-gift.style.top = newY + "px";
-
-clickCount++;
-
-}
-
-if(clickCount > 8){
-
-gift.style.display="none";
-showFinalMessage();
+gift.style.display="block"
 
 }
 
 }
 
-function showFinalMessage(){
+function moveOrb(){
 
-document.getElementById("birthdayMessage").style.display="block";
+let x = Math.random()*(window.innerWidth-80)
+let y = Math.random()*(window.innerHeight-80)
+
+orb.style.left = x+"px"
+orb.style.top = y+"px"
+
+}
+
+gift.onmousemove = function(){
+
+let x = Math.random()*(window.innerWidth-120)
+let y = Math.random()*(window.innerHeight-120)
+
+gift.style.left = x+"px"
+gift.style.top = y+"px"
+
+}
+
+gift.onclick = function(){
+
+gift.style.display="none"
+
+document.getElementById("message").style.display="block"
 
 confetti({
-particleCount:250,
-spread:140,
+particleCount:300,
+spread:120,
 origin:{y:0.6}
-});
-
-document.getElementById("music").play();
+})
 
 }
 
-    var countDate = new Date("Mar 16, 2026 09:00:00").getTime();
-
-    var timer = setInterval(function(){
-
-    var now = new Date().getTime();
-    var distance = countDate - now;
-
-    var days = Math.floor(distance/(1000*60*60*24));
-    var hours = Math.floor((distance%(1000*60*60*24))/(1000*60*60));
-    var minutes = Math.floor((distance%(1000*60*60))/(1000*60));
-    var seconds = Math.floor((distance%(1000*60))/1000);
-
-    document.getElementById("countdown").innerHTML =
-    days + "d " + hours + "h " + minutes + "m " + seconds + "s";
-
-    if(distance < 0){
-
-    clearInterval(timer);
-
-    document.getElementById("countdown").style.display="none";
-    document.getElementById("surprise").style.display="block";
-
-    }
-
-    },1000);
-
 </script>
-
-
 
 </body>
 </html>
