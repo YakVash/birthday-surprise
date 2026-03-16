@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Happy Birthday Bro 🎉</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family: Arial;
+    text-align:center;
+    background: linear-gradient(120deg,#ff9a9e,#fad0c4);
+    height:100vh;
+}
+
+.container{
+    margin-top:120px;
+}
+
+h1{
+    font-size:60px;
+    color:white;
+}
+
+p{
+    font-size:22px;
+    color:white;
+}
+
+button{
+    padding:15px 30px;
+    font-size:20px;
+    border:none;
+    border-radius:10px;
+    background:#ff4081;
+    color:white;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#e91e63;
+}
+
+#message{
+    display:none;
+    font-size:28px;
+    margin-top:30px;
+}
+
+img{
+    width:250px;
+    border-radius:20px;
+    margin-top:20px;
+}
+
+</style>
+
+<script>
+
+function showMessage(){
+    document.getElementById("message").style.display="block"
+}
+
+</script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🎉 Happy Birthday Bro 🎉</h1>
+
+<p>Click the button for a surprise</p>
+
+<button onclick="showMessage()">Open Surprise 🎁</button>
+
+<div id="message">
+
+<p>You are the best brother ever!</p>
+<p>Hope your year is full of happiness, success and cake 🎂</p>
+
+<img src="brother.jpg">
+
+</div>
+
+</div>
+
+</body>
+</html>
