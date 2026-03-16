@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Birthday Challenge</title>
+<title>Birthday Mission</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
@@ -9,14 +9,14 @@
 
 body{
 margin:0;
-background:#050510;
+background:#04040a;
 font-family:'Orbitron',sans-serif;
 color:#00f7ff;
 text-align:center;
 overflow:hidden;
 }
 
-/* CYBER GRID BACKGROUND */
+/* CYBER GRID */
 
 .grid{
 position:fixed;
@@ -33,7 +33,7 @@ z-index:-1;
 
 h1{
 font-size:55px;
-margin-top:80px;
+margin-top:70px;
 text-shadow:0 0 20px #00f7ff;
 }
 
@@ -48,15 +48,25 @@ font-size:22px;
 margin-top:10px;
 }
 
-/* ORB GAME */
+/* LEVEL OBJECTS */
 
-#orb{
+.orb{
 width:60px;
 height:60px;
 border-radius:50%;
 background:#00f7ff;
 position:absolute;
 box-shadow:0 0 25px #00f7ff;
+cursor:pointer;
+}
+
+.target{
+width:60px;
+height:60px;
+border-radius:50%;
+background:#ff00f7;
+position:absolute;
+box-shadow:0 0 25px #ff00f7;
 cursor:pointer;
 }
 
@@ -84,7 +94,7 @@ transform:translate(-50%,-50%);
 }
 
 #message h1{
-font-size:65px;
+font-size:70px;
 color:#ff00f7;
 text-shadow:0 0 30px #ff00f7;
 }
@@ -99,54 +109,76 @@ text-shadow:0 0 30px #ff00f7;
 
 <div class="grid"></div>
 
-<h1>LEVEL 1</h1>
-<h2>Catch the Energy Orbs ⚡</h2>
+<h1 id="title">LEVEL 1</h1>
+<h2 id="subtitle">Catch the Energy Orbs ⚡</h2>
 
-<div id="score">Score: 0 / 6</div>
+<div id="score">Score: 0</div>
 
-<div id="orb"></div>
+<div id="orb" class="orb"></div>
+<div id="target" class="target" style="display:none"></div>
 
 <div id="gift">🎁</div>
 
 <div id="message">
-
 <h1>🎉 HAPPY BIRTHDAY BRO 🎉</h1>
-
-<p>You beat the game 😎</p>
-
-<p>Have an awesome year ahead!</p>
-
+<p>You completed the mission 😎</p>
 </div>
-
-<audio id="music" autoplay loop>
-<source src="techno.mp3" type="audio/mpeg">
-</audio>
 
 <script>
 
-/* LEVEL 1 GAME */
+/* VARIABLES */
 
 let score = 0
+let level = 1
+
 let orb = document.getElementById("orb")
+let target = document.getElementById("target")
 let gift = document.getElementById("gift")
 
-moveOrb()
+moveObject(orb)
+
+/* LEVEL 1 */
 
 orb.onclick = function(){
 
 score++
+updateScore()
 
-document.getElementById("score").innerText =
-"Score: " + score + " / 6"
+moveObject(orb)
 
-moveOrb()
+if(score >= 5){
+
+level = 2
+score = 0
+
+orb.style.display="none"
+target.style.display="block"
+
+document.getElementById("title").innerText="LEVEL 2"
+document.getElementById("subtitle").innerText="Hit the Neon Targets 🎯"
+
+moveObject(target)
+
+}
+
+}
+
+/* LEVEL 2 */
+
+target.onclick = function(){
+
+score++
+updateScore()
+
+moveObject(target)
 
 if(score >= 6){
 
-orb.style.display="none"
+level = 3
+target.style.display="none"
 
-document.querySelector("h1").innerText="LEVEL CLEARED"
-document.querySelector("h2").innerText="Catch the gift to unlock it"
+document.getElementById("title").innerText="FINAL LEVEL"
+document.getElementById("subtitle").innerText="Catch the Gift 🎁"
 
 gift.style.display="block"
 
@@ -154,17 +186,25 @@ gift.style.display="block"
 
 }
 
-function moveOrb(){
+/* MOVE OBJECT */
 
-let x = Math.random()*(window.innerWidth-80)
-let y = Math.random()*(window.innerHeight-80)
+function moveObject(obj){
 
-orb.style.left = x+"px"
-orb.style.top = y+"px"
+let x = Math.random()*(window.innerWidth-100)
+let y = Math.random()*(window.innerHeight-100)
+
+obj.style.left = x+"px"
+obj.style.top = y+"px"
 
 }
 
-/* GIFT BOSS LEVEL */
+/* SCORE */
+
+function updateScore(){
+document.getElementById("score").innerText="Score: "+score
+}
+
+/* GIFT DODGE */
 
 gift.onmousemove = function(){
 
@@ -176,7 +216,7 @@ gift.style.top = y+"px"
 
 }
 
-/* FINAL WIN */
+/* WIN */
 
 gift.onclick = function(){
 
@@ -185,7 +225,7 @@ gift.style.display="none"
 document.getElementById("message").style.display="block"
 
 confetti({
-particleCount:350,
+particleCount:400,
 spread:120,
 origin:{y:0.6}
 })
